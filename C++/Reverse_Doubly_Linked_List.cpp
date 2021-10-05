@@ -1,101 +1,97 @@
-/*
-
-Problem Statement: Write a C++ code to reverse a double linked list and demonstrate its working by giving an example
-
-Time complexity achieved: O(N) where N is the number of nodes in the initial doubly linked list which is to be reversed.
-
-Explanation for time complexity: We visit each node and swap their next and previous pointers. So, it is accomplished in linar time.
-
-*/
-
-#include<stdio.h>
-#include<stdlib.h>
-
-typedef struct node node;
-
-struct node{
-    node* prev;
+#include <bits/stdc++.h>
+using namespace std;
+ 
+/* a node of the doubly linked list */
+class Node
+{
+    public:
     int data;
-    node* next;
+    Node *next;
+    Node *prev;
 };
-
-node* insert_doubly(node* head, int val){
-    node* new = malloc(sizeof(node));
-    new->data=val;
-    new->next=NULL;
-
-    if (head==NULL){
-        new->prev=NULL;
-        return new;
+ 
+/* Function to reverse a Doubly Linked List */
+void reverse(Node **head_ref)
+{
+    Node *temp = NULL;
+    Node *current = *head_ref;
+     
+    /* swap next and prev for all nodes of
+    doubly linked list */
+    while (current != NULL)
+    {
+        temp = current->prev;
+        current->prev = current->next;
+        current->next = temp;            
+        current = current->prev;
     }
-
-    else {
-        while(head->next!=NULL){
-            head = head->next;
-        }
-
-        head->next = new;
-        new->prev=head;
+     
+    /* Before changing the head, check for the cases like empty
+        list and list with only one node */
+    if(temp != NULL )
+        *head_ref = temp->prev;
+}
+ 
+ 
+ 
+/* UTILITY FUNCTIONS */
+/* Function to insert a node at the
+beginning of the Doubly Linked List */
+void push(Node** head_ref, int new_data)
+{
+    /* allocate node */
+    Node* new_node = new Node();
+ 
+    /* put in the data */
+    new_node->data = new_data;
+     
+    /* since we are adding at the beginning,
+    prev is always NULL */
+    new_node->prev = NULL;
+ 
+    /* link the old list off the new node */
+    new_node->next = (*head_ref);    
+ 
+    /* change prev of head node to new node */
+    if((*head_ref) != NULL)
+    (*head_ref)->prev = new_node ;
+ 
+    /* move the head to point to the new node */
+    (*head_ref) = new_node;
+}
+ 
+/* Function to print nodes in a given doubly linked list
+This function is same as printList() of singly linked list */
+void printList(Node *node)
+{
+    while(node != NULL)
+    {
+        cout << node->data << " ";
+        node = node->next;
     }
 }
-
-node* reverse_doubly(node* head){
-    node* curr = head;
-    node* temp;
-
-    while(curr->next!=NULL){
-        temp = curr->next;
-        curr->next = curr->prev;
-        curr->prev=temp;
-        curr = temp;
-    }
-
-    curr->next = curr->prev;
-    curr->prev=NULL;
-    return curr;
-}
-
-node* delete_doubly(node* head, int val){
-
-    node* curr = head;
-
-    while(curr->data!=val){
-        curr = curr->next;
-    }
-
-    node* temp = curr->prev;
-
-    temp->next = curr->next;
-
-    free(curr);
-
-    return head;
-}
-
-void print_doubly(node* head){
-    while(head!=NULL){
-        printf("%d\t", head->data);
-        head = head->next;
-    }
-    printf("\n");
-}
-
-int main(void){
-
-    node* head = NULL;
-
-    head = insert_doubly(head, 8);
-    insert_doubly(head, 13);
-    insert_doubly(head, 34);
-    insert_doubly(head, 76);
-    insert_doubly(head, 1);
-    insert_doubly(head, 98);
-
-    print_doubly(head);
-
-    head = reverse_doubly(head);
-
-    print_doubly(head);
-
+ 
+/* Driver code */
+int main()
+{
+    /* Start with the empty list */
+    Node* head = NULL;
+     
+    /* Let us create a sorted linked list to test the functions
+    Created linked list will be 10->8->4->2 */
+    push(&head, 2);
+    push(&head, 4);
+    push(&head, 8);
+    push(&head, 10);
+     
+    cout << "Original Linked list" << endl;
+    printList(head);
+     
+    /* Reverse doubly linked list */
+    reverse(&head);
+     
+    cout << "\nReversed Linked list" << endl;
+    printList(head);        
+     
     return 0;
 }
