@@ -39,14 +39,15 @@ int main()
     cout << "Enter the number of coins" << endl;
     int n;
     cin >> n;
-    cout << "Enter the type of coins" << endl;
+    cout << "Input the type of coins" << endl;
     vector<int> coins(n, 0);
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i <= n-1; i++)
     {
         cin >> coins[i];
     }
     cout << "Enter the amount to be made" << endl;
     int amt;
+    
     cin >> amt;
 
     cout << endl;
